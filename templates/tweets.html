@@ -1,0 +1,50 @@
+{% extends 'base.html' %} 
+{% block title %} Stupid twitter {% endblock %} 
+
+{% block content %}
+<h1>Viewing tweets</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }} 
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+
+    <p>
+        {{ field.label }} 
+        {{ field (class_="form-control") }} 
+
+        {% for error in field.errors %}
+        <span class="form-text text-danger">
+                    {{ error }}
+                </span> {% endfor %}
+        <p>
+            {% endfor %}
+        <button class="btn btn-success" type="submit">Tweet!</button>
+</form>
+
+
+<div>
+    {% for tweet in tweets %}
+
+    <div class="card my-4">
+        <div class="card-body">
+            <h5 class="card-title text-info">
+                {{ tweet.user.username }} 
+                
+                {% if tweet.user_id == session['user_id'] %}
+                    <form action="/tweets/{{tweet.id}}" method="POST" style="display:inline">
+                    <button class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                {% endif %}
+            </h5>
+            <h6 class="card-subtitle mb-e text-muted">Date goes here</h6>
+            <p class="card-text">
+                {{ tweet.text }}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
